@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "mlx/mlx.h"
-#include "key_macos.h"
+//#include "key_macos.h"
 #include <math.h>
 #include <string.h>
 #include <stdio.h>
@@ -26,6 +26,24 @@
 #define width 640
 #define height 480
 #define numSprites 19
+
+#define XK_MISCELLANY
+#include <X11/keysymdef.h>
+#include <X11/keysym.h>
+#include <X11/X.h>
+
+# define KEY_ESC 53
+# define KEY_W 119
+# define KEY_A 97
+# define KEY_S 115 
+# define KEY_D 100
+
+# define KEY_UP 65362
+# define KEY_LEFT 65361
+# define KEY_DOWN 65364
+# define KEY_RIGHT 65363
+
+
 
 typedef struct	s_img
 {
@@ -476,30 +494,30 @@ void	key_update(t_info *info)
 
 int		key_press(int key, t_info *info)
 {
-	if (key == K_ESC)
+	if (key == KEY_ESC)
 		exit(0);
-	else if (key == K_W)
+	else if (key == KEY_W)
 		info->key_w = 1;
-	else if (key == K_A)
+	else if (key == KEY_A)
 		info->key_a = 1;
-	else if (key == K_S)
+	else if (key == KEY_S)
 		info->key_s = 1;
-	else if (key == K_D)
+	else if (key == KEY_D)
 		info->key_d = 1;
 	return (0);
 }
 
 int		key_release(int key, t_info *info)
 {
-	if (key == K_ESC)
+	if (key == KEY_ESC)
 		exit(0);
-	else if (key == K_W)
+	else if (key == KEY_W)
 		info->key_w = 0;
-	else if (key == K_A)
+	else if (key == KEY_A)
 		info->key_a = 0;
-	else if (key == K_S)
+	else if (key == KEY_S)
 		info->key_s = 0;
-	else if (key == K_D)
+	else if (key == KEY_D)
 		info->key_d = 0;
 	return (0);
 }

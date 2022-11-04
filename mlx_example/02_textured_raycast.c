@@ -12,7 +12,7 @@
 
 //#include "../mlx/mlx.h"
 #include "mlx_linux/mlx.h"
-#include "key_macos.h"
+//#include "key_macos.h"
 #include <math.h>
 #include <string.h>
 #include <stdio.h>
@@ -25,6 +25,23 @@
 #define mapHeight 24
 #define width 1920
 #define height 1080
+
+#define XK_MISCELLANY
+#include <X11/keysymdef.h>
+#include <X11/keysym.h>
+#include <X11/X.h>
+
+# define KEY_ESC 53
+# define KEY_W 119
+# define KEY_A 97
+# define KEY_S 115 
+# define KEY_D 100
+
+# define KEY_UP 65362
+# define KEY_LEFT 65361
+# define KEY_DOWN 65364
+# define KEY_RIGHT 65363
+
 
 typedef struct	s_img
 {
@@ -237,7 +254,7 @@ int	main_loop(t_info *info)
 
 int	key_press(int key, t_info *info)
 {
-	if (key == K_W)
+	if (key == KEY_W || KEY_UP)
 	{
 		if (!worldMap[(int)(info->posX + info->dirX * info->moveSpeed)][(int)(info->posY)])
 			info->posX += info->dirX * info->moveSpeed;
@@ -245,7 +262,7 @@ int	key_press(int key, t_info *info)
 			info->posY += info->dirY * info->moveSpeed;
 	}
 	//move backwards if no wall behind you
-	if (key == K_S)
+	if (key == KEY_S || KEY_DOWN)
 	{
 		if (!worldMap[(int)(info->posX - info->dirX * info->moveSpeed)][(int)(info->posY)])
 			info->posX -= info->dirX * info->moveSpeed;
@@ -253,7 +270,7 @@ int	key_press(int key, t_info *info)
 			info->posY -= info->dirY * info->moveSpeed;
 	}
 	//rotate to the right
-	if (key == K_D)
+	if (key == KEY_D || KEY_RIGHT)
 	{
 		//both camera direction and camera plane must be rotated
 		double oldDirX = info->dirX;
@@ -264,7 +281,7 @@ int	key_press(int key, t_info *info)
 		info->planeY = oldPlaneX * sin(-info->rotSpeed) + info->planeY * cos(-info->rotSpeed);
 	}
 	//rotate to the left
-	if (key == K_A)
+	if (key == KEY_A || KEY_LEFT)
 	{
 		//both camera direction and camera plane must be rotated
 		double oldDirX = info->dirX;
@@ -274,7 +291,7 @@ int	key_press(int key, t_info *info)
 		info->planeX = info->planeX * cos(info->rotSpeed) - info->planeY * sin(info->rotSpeed);
 		info->planeY = oldPlaneX * sin(info->rotSpeed) + info->planeY * cos(info->rotSpeed);
 	}
-	if (key == K_ESC)
+	if (key == KEY_ESC)
 		exit(0);
 	mlx_clear_window(info->mlx, info->win);
 	main_loop(info);
@@ -283,6 +300,7 @@ int	key_press(int key, t_info *info)
 
 int	main(void)
 {
+	printf(" aqui\n\n\n\n\n");
 	t_info info;
 	info.mlx = mlx_init();
 
@@ -341,10 +359,10 @@ int	main(void)
 
 	info.img.img = mlx_new_image(info.mlx, width, height);
 	info.img.data = (int *)mlx_get_data_addr(info.img.img, &info.img.bpp, &info.img.size_l, &info.img.endian);
-	main_loop(&info);
-	mlx_key_hook(info.win, &key_press, &info);
-// 	mlx_loop_hook(info.mlx, &main_loop, &info);
-// 	mlx_hook(info.win, X_EVENT_KEY_PRESS, 0, &key_press, &info);
+//	main_loop(&info);
+//	mlx_key_hook(info.win, &key_press, &info);
+ 	mlx_loop_hook(info.mlx, &main_loop, &info);
+ 	mlx_hook(info.win, X_EVENT_KEY_PRESS, 0, &key_press, &info);
 
 	mlx_loop(info.mlx);
 }
